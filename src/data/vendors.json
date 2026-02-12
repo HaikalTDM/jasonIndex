@@ -1,0 +1,53 @@
+[
+  {
+    "id": "ayam-gepuk-the-cut-sini",
+    "name": "Ayam Gepuk The Cut Sini",
+    "state": "Selangor",
+    "address": "Jalan Besar, Kampung Selayang Indah, Batu Caves, Selayang Municipal Council, Gombak, Selangor, 68100, Malaysia",
+    "latitude": 3.2489811,
+    "longitude": 101.6632853,
+    "jason_score": 7.8,
+    "keypoints": [
+      "Cheap",
+      "So fragrant",
+      "Close to the big one"
+    ],
+    "tiktok_url": "https://www.tiktok.com/@scaredtodie/video/7537537778930715922?q=jason%20the%20cut%20sini&t=1770801116572",
+    "review_date": "2026-02-11",
+    "image_url": "https://images.unsplash.com/photo-1562967916-eb82221dfb92?q=80&w=686&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
+  },
+  {
+    "id": "lidah-manja",
+    "name": "Lidah Manja",
+    "state": "Selangor",
+    "address": "The Flavourist, Lorong Selangor, Gaya Aparments, Taman Melawati, Ulu Kelang, Ampang Jaya Municipal Council, Gombak, Selangor, 53100, Malaysia",
+    "latitude": 3.2127675,
+    "longitude": 101.7460974,
+    "jason_score": 8.5,
+    "keypoints": [
+      "Has habanero!",
+      "Parking is very, very simple.",
+      "Add one ringgit for the habanero sambal "
+    ],
+    "tiktok_url": "https://www.tiktok.com/@scaredtodie/video/7605062668168285458",
+    "review_date": "2026-02-11",
+    "image_url": "https://scontent.fkul8-3.fna.fbcdn.net/v/t39.30808-6/584610410_1391101306359950_2662177738893709003_n.jpg?_nc_cat=105&ccb=1-7&_nc_sid=833d8c&_nc_eui2=AeEFhWORhkdCnn9LOiS0YWjnwME--ejqQuTAwT756OpC5AKL7hmlKjUUxDo_136NACc0EOJKBaoaxk7vxiF4rDiE&_nc_ohc=ozjLHZSEBPAQ7kNvwFWNB9S&_nc_oc=AdmtlQ2ZJM0ocfSlcknX7z9d7zrxkfd5LDAlbE_dLHKK9eR_fqTbb5f_UWACfuVetYrVzKO67H7CbOItObJD6tuV&_nc_zt=23&_nc_ht=scontent.fkul8-3.fna&_nc_gid=ECHb6om9zPj-r70qs2s5NQ&oh=00_Afvo6-URGCULWb3oaDVgTC3Oh-lbl8lClB0yri2xl-i3fQ&oe=69928130"
+  },
+  {
+    "id": "lieniey-nasi-kerabu-tumis-jalan-bukit-marak",
+    "name": "Lieniey Nasi Kerabu Tumis @ Jalan Bukit Marak",
+    "state": "Kelantan",
+    "address": "Gong Dermin, Kampung Wakaf Stan, Kota Bharu, Kelantan, 16150, Malaysia",
+    "latitude": 6.0625954,
+    "longitude": 102.2973521,
+    "jason_score": 8.7,
+    "keypoints": [
+      "Smoky and honeyed BBQ flavor",
+      "Tender and juicy chicken meat",
+      "Overall a divine piece of chicken"
+    ],
+    "tiktok_url": "https://www.tiktok.com/@scaredtodie/video/7603951383284354311",
+    "review_date": "2026-02-11",
+    "image_url": "https://images.deliveryhero.io/image/fd-my/LH/lg2t-listing.jpg"
+  }
+]
