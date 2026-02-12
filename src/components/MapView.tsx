@@ -26,8 +26,8 @@ export function MapView({ vendors }: MapViewProps) {
     // Calculate center of all vendors
     const center: [number, number] = vendors.length > 0
         ? [
-            vendors.reduce((sum, v) => sum + parseFloat(v.latitude), 0) / vendors.length,
-            vendors.reduce((sum, v) => sum + parseFloat(v.longitude), 0) / vendors.length
+            vendors.reduce((sum, v) => sum + Number(v.latitude), 0) / vendors.length,
+            vendors.reduce((sum, v) => sum + Number(v.longitude), 0) / vendors.length
         ]
         : [3.1390, 101.6869] // Default to KL
 
@@ -45,8 +45,8 @@ export function MapView({ vendors }: MapViewProps) {
                 />
 
                 {vendors.map((vendor) => {
-                    const lat = parseFloat(vendor.latitude)
-                    const lng = parseFloat(vendor.longitude)
+                    const lat = Number(vendor.latitude)
+                    const lng = Number(vendor.longitude)
 
                     return (
                         <Marker
