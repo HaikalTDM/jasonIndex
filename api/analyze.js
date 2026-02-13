@@ -32,7 +32,7 @@ export default async function handler(req, res) {
         }
 
         const genAI = new GoogleGenerativeAI(finalApiKey);
-        const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash-8b" });
+        const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
 
         const prompt = `
         You are an expert food review analyst. Extract the following details from the video transcript provided below.

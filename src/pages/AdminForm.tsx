@@ -164,26 +164,64 @@ export function AdminForm() {
         }
     }
 
-    const handleMapsExtract = () => {
+    const normalizeState = (osmState: string) => {
+        if (!osmState) return ""
+        const lower = osmState.toLowerCase()
+        if (lower.includes("kuala lumpur")) return "Kuala Lumpur"
+        if (lower.includes("putrajaya")) return "Putrajaya"
+        if (lower.includes("labuan")) return "Labuan"
+        if (lower.includes("pinang")) return "Penang"
+        if (lower.includes("sembilan")) return "Negeri Sembilan"
+        if (lower.includes("malacca") || lower.includes("melaka")) return "Melaka"
+
+        // Try to find partial match in our options
+        const match = stateOptions.find(opt => lower.includes(opt.value.toLowerCase()))
+        return match ? match.value : osmState
+    }
+
+    const handleMapsExtract = async () => {
         if (!mapsUrl) return
 
         try {
-            // Extract coordinates @lat,lng
+            // 1. Extract Name & Coordinates from URL
+            let lat = "", lng = "";
+
             const coordsMatch = mapsUrl.match(/@(-?\d+\.\d+),(-?\d+\.\d+)/);
             if (coordsMatch) {
+                lat = coordsMatch[1];
+                lng = coordsMatch[2];
                 setFormData(prev => ({
                     ...prev,
-                    latitude: coordsMatch[1],
-                    longitude: coordsMatch[2]
+                    latitude: lat,
+                    longitude: lng
                 }));
-                toast.success("Coordinates extracted!");
             }
 
-            // Extract name /place/Name/
             const nameMatch = mapsUrl.match(/\/place\/([^/]+)\//);
             if (nameMatch) {
                 const name = decodeURIComponent(nameMatch[1].replace(/\+/g, ' '));
                 setFormData(prev => ({ ...prev, name }));
+            }
+
+            if (lat && lng) {
+                // 2. Fetch connection to get Address (Reverse Geocoding via Nominatim)
+                toast.loading("Fetching address details...", { id: "geo-toast" });
+
+                const response = await fetch(`https://nominatim.openstreetmap.org/reverse?format=json&lat=${lat}&lon=${lng}`);
+                const data = await response.json();
+
+                if (data && data.display_name) {
+                    setFormData(prev => ({
+                        ...prev,
+                        address: data.display_name,
+                        state: normalizeState(data.address.state) || prev.state
+                    }));
+                    toast.success("Address & Coordinates found!", { id: "geo-toast" });
+                } else {
+                    toast.success("Coordinates extracted!", { id: "geo-toast" });
+                }
+            } else {
+                toast.error("Could not find coordinates in URL");
             }
         } catch (e) {
             toast.error("Failed to extract data");
