@@ -8,6 +8,7 @@ export interface Vendor {
     jason_score: number
     keypoints: string[]
     tiktok_url: string
+    maps_url?: string
     review_date: string
     image_url: string
 }

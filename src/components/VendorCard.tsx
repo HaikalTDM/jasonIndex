@@ -44,6 +44,16 @@ export function VendorCard({ vendor, index = 0 }: VendorCardProps) {
                     <div className="flex items-center gap-1.5 mt-1.5 text-stone-500">
                         <MapPin size={13} strokeWidth={2} />
                         <span className="text-xs font-medium uppercase tracking-wide">{vendor.state}</span>
+                        <a
+                            href={vendor.maps_url || `https://www.google.com/maps/search/?api=1&query=${vendor.latitude},${vendor.longitude}`}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            onClick={(e) => e.stopPropagation()}
+                            className="z-20 ml-auto flex items-center gap-1 text-[10px] font-bold bg-stone-100 hover:bg-green-100 text-stone-500 hover:text-green-700 px-2 py-1 rounded-full transition-colors"
+                        >
+                            <MapPin size={12} />
+                            MAP
+                        </a>
                     </div>
                 </div>
 

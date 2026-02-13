@@ -28,6 +28,7 @@ export function AdminForm() {
         keypoint2: "",
         keypoint3: "",
         tiktokUrl: "",
+        mapsUrl: "",
         imageUrl: "",
         date: new Date().toISOString().split('T')[0]
     })
@@ -79,6 +80,7 @@ export function AdminForm() {
                             keypoint2: vendor.keypoints[1] || "",
                             keypoint3: vendor.keypoints[2] || "",
                             tiktokUrl: vendor.tiktok_url || "",
+                            mapsUrl: vendor.maps_url || "",
                             imageUrl: vendor.image_url || "",
                             date: vendor.review_date || new Date().toISOString().split('T')[0]
                         })
@@ -114,6 +116,7 @@ export function AdminForm() {
                     jason_score: parseFloat(formData.score),
                     keypoints: [formData.keypoint1, formData.keypoint2, formData.keypoint3].filter(Boolean),
                     tiktok_url: formData.tiktokUrl,
+                    maps_url: formData.mapsUrl,
                     image_url: formData.imageUrl,
                     review_date: formData.date
                 })
@@ -205,7 +208,8 @@ export function AdminForm() {
                 setFormData(prev => ({
                     ...prev,
                     latitude: lat,
-                    longitude: lng
+                    longitude: lng,
+                    mapsUrl: mapsUrl // Save the link used for extraction
                 }));
             }
 
@@ -394,6 +398,11 @@ export function AdminForm() {
                 <div>
                     <label className="text-sm font-medium block mb-2 text-stone-700">TikTok URL</label>
                     <Input name="tiktokUrl" placeholder="TikTok URL" value={formData.tiktokUrl} onChange={handleChange} />
+                </div>
+
+                <div>
+                    <label className="text-sm font-medium block mb-2 text-stone-700">Google Maps URL</label>
+                    <Input name="mapsUrl" placeholder="Google Maps URL" value={formData.mapsUrl} onChange={handleChange} />
                 </div>
 
                 <div>
