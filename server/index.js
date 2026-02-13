@@ -56,6 +56,24 @@ app.get('/api/vendors', (req, res) => {
     }
 });
 
+// GET single vendor
+app.get('/api/vendors/:id', (req, res) => {
+    try {
+        const { id } = req.params;
+        const fileData = fs.readFileSync(dataPath, 'utf8');
+        const vendors = JSON.parse(fileData);
+        const vendor = vendors.find(v => v.id === id);
+
+        if (!vendor) {
+            return res.status(404).json({ error: 'Vendor not found' });
+        }
+        res.json(vendor);
+    } catch (error) {
+        console.error('Error fetching one vendor:', error);
+        res.status(500).json({ error: 'Failed to fetch vendor' });
+    }
+});
+
 // PUT update vendor
 app.put('/api/vendors/:id', (req, res) => {
     try {
