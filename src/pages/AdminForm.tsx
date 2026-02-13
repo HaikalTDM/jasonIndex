@@ -107,7 +107,7 @@ export function AdminForm() {
                 method: isEditing ? 'PUT' : 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({
-                    id: isEditing ? id : undefined,
+                    id: isEditing ? id : (formData.name.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '') || Date.now().toString()),
                     name: formData.name,
                     state: formData.state,
                     address: formData.address,
