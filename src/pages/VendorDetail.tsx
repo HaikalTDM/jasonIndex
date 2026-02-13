@@ -1,16 +1,48 @@
+import { useState, useEffect } from "react"
 import { useParams, Link } from "react-router-dom"
-import vendors from "@/data/vendors.json"
+// import vendors from "@/data/vendors.json" // REMOVED
 import { ScoreBadge } from "@/components/ScoreBadge"
 import { ShareButtons } from "@/components/ShareButtons"
-import { ArrowLeft, MapPin, Calendar, ExternalLink } from "lucide-react"
+import { ArrowLeft, MapPin, Calendar, ExternalLink, Loader2 } from "lucide-react"
 import type { Vendor } from "@/types"
 import { motion } from "framer-motion"
 
-const vendorData: Vendor[] = vendors as Vendor[]
+// const vendorData: Vendor[] = vendors as Vendor[] // REMOVED
 
 export function VendorDetail() {
     const { id } = useParams<{ id: string }>()
-    const vendor = vendorData.find((v) => v.id === id)
+    const [vendor, setVendor] = useState<Vendor | null>(null)
+    const [loading, setLoading] = useState(true)
+
+    useEffect(() => {
+        if (!id) return;
+
+        // Try getting from API
+        fetch(`/api/vendors/${id}`)
+            .then(res => {
+                if (!res.ok) {
+                    if (res.status === 404) return null;
+                    throw new Error("Failed to load vendor");
+                }
+                return res.json();
+            })
+            .then(data => {
+                setVendor(data);
+                setLoading(false);
+            })
+            .catch(err => {
+                console.error(err);
+                setLoading(false);
+            });
+    }, [id]);
+
+    if (loading) {
+        return (
+            <div className="flex justify-center items-center min-h-[50vh]">
+                <Loader2 className="animate-spin text-amber-600" size={40} />
+            </div>
+        )
+    }
 
     if (!vendor) {
         return (

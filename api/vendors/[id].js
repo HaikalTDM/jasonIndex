@@ -31,6 +31,22 @@ export default async function handler(req, res) {
     }
 
     try {
+        if (req.method === 'GET') {
+            const { data, error } = await supabase
+                .from('vendors')
+                .select('*')
+                .eq('id', id)
+                .single();
+
+            if (error) {
+                if (error.code === 'PGRST116') { // PostgreSQL error for no rows returned
+                    return res.status(404).json({ error: 'Vendor not found' });
+                }
+                throw error;
+            }
+            return res.status(200).json(data);
+        }
+
         if (req.method === 'DELETE') {
             const { data, error } = await supabase
                 .from('vendors')
