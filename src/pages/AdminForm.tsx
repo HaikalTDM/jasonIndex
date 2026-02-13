@@ -2,7 +2,7 @@ import { useState, useEffect } from "react"
 import { useParams, useNavigate } from "react-router-dom"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
-import { ArrowLeft, Loader2 } from "lucide-react"
+import { ArrowLeft, Loader2, Sparkles, MapPin } from "lucide-react"
 import { CustomSelect } from "@/components/CustomSelect"
 import { toast } from "sonner"
 
@@ -12,6 +12,11 @@ export function AdminForm() {
     const isEditing = !!id
 
     const [isLoading, setIsLoading] = useState(false)
+    const [isAnalyzing, setIsAnalyzing] = useState(false)
+    const [transcript, setTranscript] = useState("")
+    const [mapsUrl, setMapsUrl] = useState("")
+    const [showAiTools, setShowAiTools] = useState(true)
+
     const [formData, setFormData] = useState({
         name: "",
         state: "Kuala Lumpur",
@@ -159,6 +164,62 @@ export function AdminForm() {
         }
     }
 
+    const handleMapsExtract = () => {
+        if (!mapsUrl) return
+
+        try {
+            // Extract coordinates @lat,lng
+            const coordsMatch = mapsUrl.match(/@(-?\d+\.\d+),(-?\d+\.\d+)/);
+            if (coordsMatch) {
+                setFormData(prev => ({
+                    ...prev,
+                    latitude: coordsMatch[1],
+                    longitude: coordsMatch[2]
+                }));
+                toast.success("Coordinates extracted!");
+            }
+
+            // Extract name /place/Name/
+            const nameMatch = mapsUrl.match(/\/place\/([^/]+)\//);
+            if (nameMatch) {
+                const name = decodeURIComponent(nameMatch[1].replace(/\+/g, ' '));
+                setFormData(prev => ({ ...prev, name }));
+            }
+        } catch (e) {
+            toast.error("Failed to extract data");
+        }
+    };
+
+    const handleAnalyze = async () => {
+        if (!transcript) return toast.error("Please enter a transcript");
+
+        setIsAnalyzing(true);
+        try {
+            const res = await fetch('/api/analyze', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ transcript })
+            });
+
+            const data = await res.json();
+            if (data.error) throw new Error(data.error);
+
+            setFormData(prev => ({
+                ...prev,
+                score: data.score?.toString() || prev.score,
+                keypoint1: data.keypoints?.[0] || prev.keypoint1,
+                keypoint2: data.keypoints?.[1] || prev.keypoint2,
+                keypoint3: data.keypoints?.[2] || prev.keypoint3,
+                date: data.review_date || prev.date
+            }));
+            toast.success("Analysis complete!");
+        } catch (e: any) {
+            toast.error(e.message);
+        } finally {
+            setIsAnalyzing(false);
+        }
+    };
+
     return (
         <div className="max-w-2xl mx-auto space-y-6">
             {/* Header */}
@@ -178,7 +239,57 @@ export function AdminForm() {
             </div>
 
             {/* Form */}
-            <div className="bg-white p-6 rounded-2xl border border-stone-200 shadow-sm space-y-4">
+            <div className="bg-white p-6 rounded-2xl border border-stone-200 shadow-sm space-y-6">
+
+                {/* AI Tools Section */}
+                <div className="bg-stone-50 p-4 rounded-xl space-y-4 border border-stone-100">
+                    <div className="flex items-center justify-between cursor-pointer" onClick={() => setShowAiTools(!showAiTools)}>
+                        <h3 className="font-semibold flex items-center gap-2 text-stone-700">
+                            <Sparkles size={18} className="text-amber-500" />
+                            Smart Fill Tools
+                        </h3>
+                        <span className="text-xs text-stone-400">{showAiTools ? 'Hide' : 'Show'}</span>
+                    </div>
+
+                    {showAiTools && (
+                        <div className="space-y-4 animate-in fade-in slide-in-from-top-2">
+                            {/* Maps Extractor */}
+                            <div className="flex gap-2">
+                                <Input
+                                    placeholder="Paste Google Maps URL here to extract location..."
+                                    value={mapsUrl}
+                                    onChange={(e) => setMapsUrl(e.target.value)}
+                                    className="bg-white"
+                                />
+                                <Button onClick={handleMapsExtract} variant="outline" className="shrink-0">
+                                    <MapPin size={16} className="mr-2" />
+                                    Extract
+                                </Button>
+                            </div>
+
+                            {/* AI Analysis */}
+                            <div className="space-y-2">
+                                <textarea
+                                    className="w-full min-h-[100px] p-3 rounded-lg border border-stone-200 text-sm focus:outline-none focus:ring-2 focus:ring-amber-500/20"
+                                    placeholder="Paste video transcript here..."
+                                    value={transcript}
+                                    onChange={(e) => setTranscript(e.target.value)}
+                                />
+                                <Button
+                                    onClick={handleAnalyze}
+                                    disabled={isAnalyzing || !transcript}
+                                    className="w-full bg-indigo-600 hover:bg-indigo-700 text-white"
+                                >
+                                    {isAnalyzing ? <Loader2 size={16} className="animate-spin mr-2" /> : <Sparkles size={16} className="mr-2" />}
+                                    Analyze Transcript with Gemini
+                                </Button>
+                            </div>
+                        </div>
+                    )}
+                </div>
+
+                <div className="h-px bg-stone-100" />
+
                 <div>
                     <label className="text-sm font-medium block mb-2 text-stone-700">Vendor Name</label>
                     <Input name="name" placeholder="Vendor Name" value={formData.name} onChange={handleChange} />
