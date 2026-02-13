@@ -186,10 +186,22 @@ export function AdminForm() {
             // 1. Extract Name & Coordinates from URL
             let lat = "", lng = "";
 
-            const coordsMatch = mapsUrl.match(/@(-?\d+\.\d+),(-?\d+\.\d+)/);
-            if (coordsMatch) {
-                lat = coordsMatch[1];
-                lng = coordsMatch[2];
+            // Try to find specific pin coordinates first (!3d...!4d...) - MORE ACCURATE
+            const pinMatch = mapsUrl.match(/!3d(-?\d+\.\d+)!4d(-?\d+\.\d+)/);
+
+            if (pinMatch) {
+                lat = pinMatch[1];
+                lng = pinMatch[2];
+            } else {
+                // Fallback to viewport center (@lat,lng)
+                const viewMatch = mapsUrl.match(/@(-?\d+\.\d+),(-?\d+\.\d+)/);
+                if (viewMatch) {
+                    lat = viewMatch[1];
+                    lng = viewMatch[2];
+                }
+            }
+
+            if (lat && lng) {
                 setFormData(prev => ({
                     ...prev,
                     latitude: lat,
