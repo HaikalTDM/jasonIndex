@@ -61,6 +61,7 @@ export function VendorDetail() {
         : undefined
 
     const mapEmbedUrl = `https://www.google.com/maps?q=${vendor.latitude},${vendor.longitude}&z=15&output=embed`
+    const mapsLink = vendor.maps_url || `https://www.google.com/maps/search/?api=1&query=${vendor.latitude},${vendor.longitude}`
 
     const reviewDate = new Date(vendor.review_date).toLocaleDateString("en-MY", {
         year: "numeric",
@@ -154,10 +155,18 @@ export function VendorDetail() {
                             <span>Reviewed on {reviewDate}</span>
                         </div>
                         <a
-                            href={vendor.tiktok_url}
+                            href={mapsLink}
                             target="_blank"
                             rel="noopener noreferrer"
                             className="flex items-center gap-1.5 text-xs font-bold text-amber-700 hover:underline"
+                        >
+                            Open in Maps <ExternalLink size={12} />
+                        </a>
+                        <a
+                            href={vendor.tiktok_url}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="flex items-center gap-1.5 text-xs font-bold text-stone-700 hover:underline"
                         >
                             View on TikTok <ExternalLink size={12} />
                         </a>
