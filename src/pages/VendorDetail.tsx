@@ -18,7 +18,7 @@ export function VendorDetail() {
         if (!id) return;
 
         // Try getting from API
-        fetch(`/api/vendors/${id}`)
+        fetch(`/api/vendors?id=${id}`)
             .then(res => {
                 if (!res.ok) {
                     if (res.status === 404) return null;

@@ -44,11 +44,20 @@ app.post('/api/vendors', (req, res) => {
     }
 });
 
-// GET all vendors
+// GET all vendors (or single by ID query)
 app.get('/api/vendors', (req, res) => {
     try {
         const fileData = fs.readFileSync(dataPath, 'utf8');
         const vendors = JSON.parse(fileData);
+
+        if (req.query.id) {
+            const vendor = vendors.find(v => v.id === req.query.id);
+            if (!vendor) {
+                return res.status(404).json({ error: 'Vendor not found' });
+            }
+            return res.json(vendor);
+        }
+
         res.json(vendors);
     } catch (error) {
         console.error('Error reading file:', error);

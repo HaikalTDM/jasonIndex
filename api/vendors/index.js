@@ -26,6 +26,22 @@ export default async function handler(req, res) {
 
     try {
         if (req.method === 'GET') {
+            const { id } = req.query;
+
+            if (id) {
+                // Get single vendor by ID
+                const { data, error } = await supabase
+                    .from('vendors')
+                    .select('*')
+                    .eq('id', id)
+                    .single();
+
+                if (error) {
+                    return res.status(404).json({ error: 'Vendor not found' });
+                }
+                return res.status(200).json(data);
+            }
+
             // Get all vendors
             const { data, error } = await supabase
                 .from('vendors')
